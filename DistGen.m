@@ -1,13 +1,14 @@
 function [p] = DistGen(type, varargin)
-%DistGen is a function that defines probability distributions with user
-%defined distribution type(Normal, Exponential, or Lognormal) and needed
-%inputs for those given distribution in their respective order
+%DistGen 
+% A function that defines probability distributions with user
+% defined distribution type(Normal, Exponential, or Lognormal) and needed
+% inputs for those given distribution in their respective order
 %...
 %INPUTS:
 %   type     -- string of the type of distribution wanted. For list of type
 %   "makedist" into Command Prompt and hit F1.
 %
-%   varagin    -- add all the imputs needed for each type of distribution 
+%   varagin  -- add all the imputs needed for each type of distribution 
 %   as needed. (see documentation of makedist for more information on
 %   inputs needed)
 %

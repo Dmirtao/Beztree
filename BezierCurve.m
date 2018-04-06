@@ -7,10 +7,10 @@ function BezCu = BezierCurve(cp, num)
 % OUTPUTS:
 % BezCu  --  Bezier curve 
 % Version 1.0
-
     h = size(cp);
     h1 = h(1);
     n = h(2);
+%   Creates a linear parameter space for [0,1]  
     u = linspace(0,1,num);
     BezCu = zeros(h1,num);
     for i = 1:n
