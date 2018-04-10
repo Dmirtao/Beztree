@@ -1,4 +1,4 @@
-function [BoundingBox, ang] = BBGen(xyz, ang, dim)
+function BoundingBox = BBGen(xyz, ang, dim)
 % BBGen Outputs bounding box origin then three normal vectors defining the edges from the origin
 % A function that outputs three vectors that fully define the
 % bounding box. These vectors correspond to the length, width, depth of the

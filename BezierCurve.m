@@ -3,7 +3,7 @@ function BezCu = BezierCurve(cp, num)
 %  ...
 % INPUTS:
 % cp     --  Input vector of values to evaluate
-% num    --  Order of calculated polynomial
+% num    --  Number of points for which to evaluate Bez Curve
 % OUTPUTS:
 % BezCu  --  Bezier curve 
 % Version 1.0
