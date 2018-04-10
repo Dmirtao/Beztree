@@ -1,10 +1,15 @@
 function [bblistNew] = BoundingCheck(bblist, BoundingBox2)
-%This function will ensure that the newly created bounding box does not
-%interfere with an existing bounding box. If the newly generated one
-%interferes the function will return and need to be called again. If the
-%newly formed bounding box does not interfere, then the new bounding box
-%will be added to bblist a 3D matrix with depth corresponding to the
-%bounding boxes on the tree.
+%BoundingCheck
+% A function will ensure that the newly created bounding box does not
+% interfere with an existing bounding box. If the newly generated one
+% interferes the function will return and need to be called again. If the
+% newly formed bounding box does not interfere, then the new bounding box
+% will be added to bblist a 3D matrix with depth corresponding to the
+% bounding boxes on the tree. This function is based of the Separating Axis
+% Test, a test to check for collisions between objects that are not convex in shape.
+%
+% For more on separating axis theorem, visit the following paper on the Separating Axis Theorem:
+% http://www.jkh.me/files/tutorials/Separating%20Axis%20Theorem%20for%20Oriented%20Bounding%20Boxes.pdf
 %...
 % INPUTS:
 %   bblist     -- 3X4X(number of bounding boxes) matrix of the bounding boxes that currently exist 
@@ -18,19 +23,32 @@ function [bblistNew] = BoundingCheck(bblist, BoundingBox2)
 %   running this function(rows and columns correspond to each BBGen output while the depth 
 %   corresponds to each bounding box that is on the tree).
 
-close all
-%Test for no Interference
-% [BoundingBox1, ang1] = BBGen([3; 4; 5], [pi/6, pi/6, pi/6], [3, 4, 5]);
+%Test Inputs for no Interference
+% [bblist, ang1] = BBGen([3; 4; 5], [pi/6, pi/6, pi/6], [3, 4, 5]);
 % [BoundingBox2, ang2] = BBGen([2; 2; 2], [pi/3, pi/3, pi/3], [3, 3, 3]);
-%Test for Interference
-% [BoundingBox1, ang1] = BBGen([3; 4; 5], [pi/6, pi/6, pi/6], [3, 4, 5]);
+%Test Inputs for Interference
+% [bblist, ang1] = BBGen([3; 4; 5], [pi/6, pi/6, pi/6], [3, 4, 5]);
 % [BoundingBox2, ang2] = BBGen([4; 5; 6], [pi/3, pi/3, pi/3], [3, 3, 3]);
-%import the one bounding box from bblist and the newly formed bounding box for testing
-t = linspace(0, 1, 50);
+
+%import each bounding box from bblist one at a time and the newly formed bounding box for testing
+tic
+%find vertices of bounding box 2
+a2 = BoundingBox2(:, 1);
+b2 = BoundingBox2(:, 2);
+c2 = BoundingBox2(:, 3);
+d2 = BoundingBox2(:, 4);
+l2 = (b2-a2)+(c2-a2)+a2;
+j2 = (b2-a2)+(d2-a2)+a2;
+k2 = (d2-a2)+(c2-a2)+a2;
+i2 = (l2-b2)+(j2-b2)+b2;
+box2 = [a2, b2, c2, d2, i2, j2, k2, l2];
+
+%import each bounding box from bblist one at a time and compare to
+%BouundingBox2
 D = size(bblist, 3);
 for i =1:D
     BoundingBox1 = bblist(:, :, i);
-    %find vertices of bounding box 1
+    %find vertices of bounding box from bblist
     a1 = BoundingBox1(:, 1);
     b1 = BoundingBox1(:, 2);
     c1 = BoundingBox1(:, 3);
@@ -41,22 +59,9 @@ for i =1:D
     i1 = (l1-b1)+(j1-b1)+b1;
     box1 = [a1, b1, c1, d1, i1, j1, k1, l1];
 
-
-    %find vertices of bounding box 2
-    a2 = BoundingBox2(:, 1);
-    b2 = BoundingBox2(:, 2);
-    c2 = BoundingBox2(:, 3);
-    d2 = BoundingBox2(:, 4);
-    l2 = (b2-a2)+(c2-a2)+a2;
-    j2 = (b2-a2)+(d2-a2)+a2;
-    k2 = (d2-a2)+(c2-a2)+a2;
-    i2 = (l2-b2)+(j2-b2)+b2;
-    box2 = [a2, b2, c2, d2, i2, j2, k2, l2];
-
-
-
-    %find local axes for both boxes
-    %for box1 axes 
+    %find local axes for both boxes and project all vertices from both
+    %boxes to these local axes and check for overlap of projections
+    %for box1 local axes 
     x1 = b1-a1;
     y1 = c1-a1;
     z1 = d1-a1;
@@ -78,7 +83,7 @@ for i =1:D
     max2y1 = max(proj_2_y1);
     min2z1 = min(proj_2_z1);
     max2z1 = max(proj_2_z1);
-    %for box2 axes
+    %for box2 local axes
     x2 = b2-a2;
     y2 = c2-a2;
     z2 = d2-a2;
@@ -101,41 +106,35 @@ for i =1:D
     min2z2 = min(proj_2_z2);
     max2z2 = max(proj_2_z2);
 
-    %Compare with if statements to check for intersections
-    q=0;r=0;s=0;t=0;u=0;v=0;
-    if min2x1 < max1x1 && max2x1 > min1x1
-        q=1;
+    %Compare with if statement to check for interference by checking if all theprojections 
+    %from one box overlap with the other box for all six axes
+    check = 0;
+    if min2x1 < max1x1 && max2x1 > min1x1 && min2y1 < max1y1 && max2y1 > min1y1 && ...
+            min2z1 < max1z1 && max2z1 > min1z1 && min2x2 < max1x2 && max2x2 > min1x2 && ...
+            min2y2 < max1y2 && max2y2 > min1y2 && min2z2 < max1z2 && max2z2 > min1z2
+        check = 1;
     end
-    if min2y1 < max1y1 && max2y1 > min1y1
-        r=1;
-    end    
-    if min2z1 < max1z1 && max2z1 > min1z1
-        s=1;
-    end    
-    if min2x2 < max1x2 && max2x2 > min1x2
-        t=1;
-    end    
-    if min2y2 < max1y2 && max2y2 > min1y2
-        u=1;
-    end    
-    if min2z2 < max1z2 && max2z2 > min1z2
-        v=1;
-    end
-    %If new bounding box does not interfere with any previous bounding boxes,
-    %store the new box in the list of prvious boxes.
-    check = sum([q, r, s, t, u, v]);
-    if check == 6
-        disp('Interference Detected')
+    
+
+    %If new bounding box does not interfere with any bounding boxes in bblist, store the new 
+    %box in bblist. If new bounding box interferes with any bounding boxes in bblist, return 
+    %and do not add the new bounding box to bblist.
+    if check == 1
+        disp('-Interference Detected-')
         bblistNew = bblist;
-        return
+        return % COMMENT if you want to plot
+%         break %UNCOMMENT if you want to plot
     else
-        disp('No Interference Detected')
+        disp('---  No Interference Detected  ---')
         bblistNew = cat(3, bblist, BoundingBox2);
     end
 end
-
+toc
+% % % UNCOMMENT to plot
+% %
+% t = linspace(0, 1, 50);
 % %plot box 1
-%find edges for box 1 (plotting only)
+% % find edges for box 1 (plotting only)
 % ab1 = (b1-a1).*t + a1;
 % ac1 = (c1-a1).*t + a1;
 % cl1 = (l1-c1).*t + c1;
@@ -150,7 +149,7 @@ end
 % li1 = (i1-l1).*t + l1;
 % figure(1)
 % hold on
-% scatter3(box1(1, :), box1(2, :), box1(3, :), 'r')
+% scatter3(BoundingBox1(1, :), BoundingBox1(2, :), BoundingBox1(3, :), 'r')
 % scatter3(ab1(1, :), ab1(2, :), ab1(3, :), 'r')
 % scatter3(ac1(1, :), ac1(2, :), ac1(3, :), 'r')
 % scatter3(cl1(1, :), cl1(2, :), cl1(3, :), 'r')
@@ -164,7 +163,7 @@ end
 % scatter3(ck1(1, :), ck1(2, :), ck1(3, :), 'r')
 % scatter3(li1(1, :), li1(2, :), li1(3, :), 'r')
 % %plot box 2
-%find edges for box 2 (plotting only)
+% % find edges for box 2 (plotting only)
 % ab2 = (b2-a2).*t + a2;
 % ac2 = (c2-a2).*t + a2;
 % cl2 = (l2-c2).*t + c2;
@@ -177,7 +176,7 @@ end
 % ad2 = (d2-a2).*t + a2;
 % ck2 = (k2-c2).*t + c2;
 % li2 = (i2-l2).*t + l2;
-% scatter3(box2(1, :), box2(2, :), box2(3, :), 'b')
+% scatter3(BoundingBox2(1, :), BoundingBox2(2, :), BoundingBox2(3, :), 'b')
 % scatter3(ab2(1, :), ab2(2, :), ab2(3, :), 'b')
 % scatter3(ac2(1, :), ac2(2, :), ac2(3, :), 'b')
 % scatter3(cl2(1, :), cl2(2, :), cl2(3, :), 'b')
@@ -190,5 +189,6 @@ end
 % scatter3(ad2(1, :), ad2(2, :), ad2(3, :), 'b')
 % scatter3(ck2(1, :), ck2(2, :), ck2(3, :), 'b')
 % scatter3(li2(1, :), li2(2, :), li2(3, :), 'b')
+
 end
 
