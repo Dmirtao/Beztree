@@ -4,8 +4,10 @@ function [outStructure,generationOut] = TreeGen(start,generationIn,maxGeneration
 %   Detailed explanation goes here
 %    Generate BBang from random dist later
 %     global bbList;
+    global inSt
 if generationIn > maxGeneration
     outStructure = inStructure;
+    generationOut = generationIn;
     return;
 else
     %   TODO: Generate weighted random angles using probability dist
@@ -19,7 +21,7 @@ else
         %   via dist
         start = BezCurve(:,end); %Placeholder test input
         [passbackStructure,passbackGen] = TreeGen(start,generationIn + 1,maxGeneration,dist,...
-            aspectRatio,CPorder,inStructure,samples,num);
+            aspectRatio,CPorder,inStructure,samples,numBranches);
     end
     outStructure = passbackStructure;
     generationOut = passbackGen;

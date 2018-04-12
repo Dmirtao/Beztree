@@ -1,11 +1,11 @@
-function [outStructure,generationOut] = TreeGen(start,generationIn,maxGeneration,...
-    dist,aspectRatio,CPorder,inStructure,samples,numBranches)
+function [generationOut] = TreeGen(start,generationIn,maxGeneration,...
+    dist,aspectRatio,CPorder,samples,numBranches)
 %TREEGEN Recursive function generating a Bezier curve structure array.
 %   Detailed explanation goes here
 %    Generate BBang from random dist later
 %     global bbList;
+global BezStructure;
 if generationIn > maxGeneration
-    outStructure = inStructure;
     generationOut = generationIn;
     return;
 else
@@ -14,15 +14,14 @@ else
     BB = BBGen(start,BBang,aspectRatio);
     cp = ControlPGen(BB,CPorder,BBang);
     BezCurve = BezierCurve(cp,samples);
-    inStructure(generationIn).curve = cat(3,inStructure(generationIn).curve,BezCurve);
+    BezStructure(generationIn).curve = cat(3,BezStructure(generationIn).curve,BezCurve);
     for i = 1:numBranches
         %   TODO: Generate new start points on Bezier curve to feed into recursed, weight randomness
         %   via dist
         start = BezCurve(:,end); %Placeholder test input
-        [passbackStructure,passbackGen] = TreeGen(start,generationIn + 1,maxGeneration,dist,...
-            aspectRatio,CPorder,inStructure,samples,numBranches);
+        [passbackGen] = TreeGen(start,generationIn + 1,maxGeneration,dist,...
+            aspectRatio,CPorder,samples,numBranches);
     end
-    outStructure = passbackStructure;
     generationOut = passbackGen;
     %     outStructure(generationIn) = TreeGen(generationIn + 1)
 end
