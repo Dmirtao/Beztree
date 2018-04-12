@@ -24,11 +24,11 @@ function [bblistNew] = BoundingCheck(bblist, BoundingBox2)
 %   corresponds to each bounding box that is on the tree).
 
 %Test Inputs for no Interference
-% [bblist, ang1] = BBGen([3; 4; 5], [pi/6, pi/6, pi/6], [3, 4, 5]);
-% [BoundingBox2, ang2] = BBGen([2; 2; 2], [pi/3, pi/3, pi/3], [3, 3, 3]);
+% bblist = BBGen([3; 4; 5], [pi/6, pi/6, pi/6], [3, 4, 5]);
+% BoundingBox2 = BBGen([2; 2; 2], [pi/3, pi/3, pi/3], [3, 3, 3]);
 %Test Inputs for Interference
-% [bblist, ang1] = BBGen([3; 4; 5], [pi/6, pi/6, pi/6], [3, 4, 5]);
-% [BoundingBox2, ang2] = BBGen([4; 5; 6], [pi/3, pi/3, pi/3], [3, 3, 3]);
+% bblist = BBGen([3; 4; 5], [pi/6, pi/6, pi/6], [3, 4, 5]);
+% BoundingBox2 = BBGen([4; 5; 6], [pi/3, pi/3, pi/3], [3, 3, 3]);
 
 %import each bounding box from bblist one at a time and the newly formed bounding box for testing
 tic
@@ -45,6 +45,7 @@ box2 = [a2, b2, c2, d2, i2, j2, k2, l2];
 
 %import each bounding box from bblist one at a time and compare to
 %BouundingBox2
+check = 0;
 D = size(bblist, 3);
 for i =1:D
     BoundingBox1 = bblist(:, :, i);
@@ -108,28 +109,16 @@ for i =1:D
 
     %Compare with if statement to check for interference by checking if all theprojections 
     %from one box overlap with the other box for all six axes
-    check = 0;
     if min2x1 < max1x1 && max2x1 > min1x1 && min2y1 < max1y1 && max2y1 > min1y1 && ...
             min2z1 < max1z1 && max2z1 > min1z1 && min2x2 < max1x2 && max2x2 > min1x2 && ...
             min2y2 < max1y2 && max2y2 > min1y2 && min2z2 < max1z2 && max2z2 > min1z2
-        check = 1;
+        check = check + 1;
     end
     
-
     %If new bounding box does not interfere with any bounding boxes in bblist, store the new 
     %box in bblist. If new bounding box interferes with any bounding boxes in bblist, return 
     %and do not add the new bounding box to bblist.
-    if check == 1
-        disp('-Interference Detected-')
-        bblistNew = bblist;
-        return % COMMENT if you want to plot
-%         break %UNCOMMENT if you want to plot
-    else
-        disp('---  No Interference Detected  ---')
-        bblistNew = cat(3, bblist, BoundingBox2);
-    end
-end
-toc
+
 % % % UNCOMMENT to plot
 % %
 % t = linspace(0, 1, 50);
@@ -189,6 +178,19 @@ toc
 % scatter3(ad2(1, :), ad2(2, :), ad2(3, :), 'b')
 % scatter3(ck2(1, :), ck2(2, :), ck2(3, :), 'b')
 % scatter3(li2(1, :), li2(2, :), li2(3, :), 'b')
+
+end
+
+if check > 1
+    disp('-Too Much Interference Detected-')
+    bblistNew = bblist;
+    return % COMMENT if you want to plot
+%         break %UNCOMMENT if you want to plot
+else
+    disp('---  Acceptable Interference Detected  ---')
+    bblistNew = cat(3, bblist, BoundingBox2);
+end
+toc
 
 end
 
