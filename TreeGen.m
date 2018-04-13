@@ -1,5 +1,5 @@
 function [outStruc,generationOut] = TreeGen(start,generationIn,maxGeneration,...
-    dist,aspectRatio,CPorder,samples,numBranches,inStruc)
+    dist,distVar, aspectRatio,CPorder,samples,numBranches,inStruc)
 %TREEGEN Recursive function generating a Bezier curve structure array.
 %   Detailed explanation goes here
 %    Generate BBang from random dist later
@@ -11,17 +11,18 @@ if generationIn > maxGeneration
     outStruc = struc;
     return;
 else
-    %   TODO: Generate weighted random angles using probability dist
-    BBang = [pi/6; pi/8; pi/12]; % Placeholder test input
+    % Bias the angle near 0 degrees (angles can be positive of negative depending on distribution)
+    distribution = DistGen(dist, distVar(1), distVar(2));
+    BBang = [random(distribution); random(distribution); random(distribution)];
     BB = BBGen(start,BBang,aspectRatio);
     cp = ControlPGen(BB,CPorder,BBang);
     BezCurve = BezierCurve(cp,samples);
     struc(generationIn).curve = cat(3,struc(generationIn).curve,BezCurve);
     for i = 1:numBranches
-        %   TODO: Generate new start points on Bezier curve to feed into recursed, weight randomness
-        %   via dist
-        start = BezCurve(:,end); %Placeholder test input
-        [passbackStr,passbackGen] = TreeGen(start,generationIn + 1,maxGeneration,dist,...
+        % Bias the branch starting location near the end of branch
+        startNext = round((1-random(distribution)), 2)*samples;
+        startNext = BezCurve(:, startNext);
+        [passbackStr,passbackGen] = TreeGen(startNext,generationIn + 1,maxGeneration,dist, distVar,...
             aspectRatio,CPorder,samples,numBranches,struc);
     end
     generationOut = passbackGen;
