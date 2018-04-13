@@ -59,13 +59,7 @@ function [Dist] = DistGen(type, varargin)
         
     %--- Exponential ---
     elseif strcmp(type, 'Exponential') == 1
-        %Check for inputs based on number of distribution inputs
-        if l > 1
-            disp('ERROR: Too many inputs for this distribution type, an input will not be used.')
-            disp('*see documentation on makedist for more information about needed inputs*')
-            return
-        end
-        
+        %Check for inputs based on number of distribution inputs        
         weight1 = varargin{1};      
         if weight1 > 1 || weight1 < 0
             disp('ERROR: Mean must be within 0 and 1')

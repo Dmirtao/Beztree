@@ -1,5 +1,6 @@
 function [outStruc,generationOut] = TreeGen(start,generationIn,maxGeneration,...
-    dist,distVar, aspectRatio,CPorder,samples,numBranches,inStruc)
+    distAng,distAngVar,distLoc,distLocVar,aspectRatio,CPorder,samples,...
+    numBranches,inStruc,bblist,bblistNew)
 %TREEGEN Recursive function generating a Bezier curve structure array.
 %   Detailed explanation goes here
 %    Generate BBang from random dist later
@@ -12,18 +13,34 @@ if generationIn > maxGeneration
     return;
 else
     % Bias the angle near 0 degrees (angles can be positive of negative depending on distribution)
-    distribution = DistGen(dist, distVar(1), distVar(2));
-    BBang = [random(distribution); random(distribution); random(distribution)];
-    BB = BBGen(start,BBang,aspectRatio);
+    distributionAng = DistGen(distAng, distAngVar(1), distAngVar(2));
+    BBang = [random(distributionAng); random(distributionAng)*-pi/2; random(distributionAng)];
+    % Bounding Box Interference Check
+    while size(bblist, 3) == size(bblistNew, 3)
+        BB = BBGen(start,BBang,aspectRatio);
+        bblistNew = BoundingCheck(bblist, BB);
+        if isempty(bblist) == 1
+            break
+        end
+    end
+    bblist = bblistNew;
     cp = ControlPGen(BB,CPorder,BBang);
     BezCurve = BezierCurve(cp,samples);
     struc(generationIn).curve = cat(3,struc(generationIn).curve,BezCurve);
     for i = 1:numBranches
         % Bias the branch starting location near the end of branch
-        startNext = round((1-random(distribution)), 2)*samples;
+        distributionLoc =  DistGen(distLoc, distLocVar(1), distLocVar(2)); 
+        loc = random(distributionLoc);
+        if loc > 1
+            loc = 1;
+        elseif loc <= 0
+            loc = 0.01;
+        end
+        startNext = round(loc*samples);
         startNext = BezCurve(:, startNext);
-        [passbackStr,passbackGen] = TreeGen(startNext,generationIn + 1,maxGeneration,dist, distVar,...
-            aspectRatio,CPorder,samples,numBranches,struc);
+        [passbackStr,passbackGen] = TreeGen(startNext,generationIn + 1,maxGeneration,distAng,...
+            distAngVar,distLoc,distLocVar,aspectRatio,CPorder,samples,numBranches,struc,...
+            bblist, bblistNew);
     end
     generationOut = passbackGen;
     outStruc = passbackStr;

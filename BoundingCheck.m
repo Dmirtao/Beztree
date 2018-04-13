@@ -31,7 +31,12 @@ function [bblistNew] = BoundingCheck(bblist, BoundingBox2)
 % BoundingBox2 = BBGen([4; 5; 6], [pi/3, pi/3, pi/3], [3, 3, 3]);
 
 %import each bounding box from bblist one at a time and the newly formed bounding box for testing
-tic
+
+% if bblist is empty add bounding box 2 to it
+if isempty(bblist) == 1
+    bblistNew = BoundingBox2;
+    return
+end
 %find vertices of bounding box 2
 a2 = BoundingBox2(:, 1);
 b2 = BoundingBox2(:, 2);
@@ -119,65 +124,65 @@ for i =1:D
     %box in bblist. If new bounding box interferes with any bounding boxes in bblist, return 
     %and do not add the new bounding box to bblist.
 
-% % % UNCOMMENT to plot
-% %
-% t = linspace(0, 1, 50);
-% %plot box 1
-% % find edges for box 1 (plotting only)
-% ab1 = (b1-a1).*t + a1;
-% ac1 = (c1-a1).*t + a1;
-% cl1 = (l1-c1).*t + c1;
-% bl1 = (l1-b1).*t + b1;
-% dk1 = (k1-d1).*t + d1;
-% ki1 = (i1-k1).*t + k1;
-% ij1 = (j1-i1).*t + i1;
-% dj1 = (j1-d1).*t + d1;
-% bj1 = (j1-b1).*t + b1;
-% ad1 = (d1-a1).*t + a1;
-% ck1 = (k1-c1).*t + c1;
-% li1 = (i1-l1).*t + l1;
-% figure(1)
-% hold on
-% scatter3(BoundingBox1(1, :), BoundingBox1(2, :), BoundingBox1(3, :), 'r')
-% scatter3(ab1(1, :), ab1(2, :), ab1(3, :), 'r')
-% scatter3(ac1(1, :), ac1(2, :), ac1(3, :), 'r')
-% scatter3(cl1(1, :), cl1(2, :), cl1(3, :), 'r')
-% scatter3(bl1(1, :), bl1(2, :), bl1(3, :), 'r')
-% scatter3(dk1(1, :), dk1(2, :), dk1(3, :), 'r')
-% scatter3(ki1(1, :), ki1(2, :), ki1(3, :), 'r')
-% scatter3(ij1(1, :), ij1(2, :), ij1(3, :), 'r')
-% scatter3(dj1(1, :), dj1(2, :), dj1(3, :), 'r')
-% scatter3(bj1(1, :), bj1(2, :), bj1(3, :), 'r')
-% scatter3(ad1(1, :), ad1(2, :), ad1(3, :), 'r')
-% scatter3(ck1(1, :), ck1(2, :), ck1(3, :), 'r')
-% scatter3(li1(1, :), li1(2, :), li1(3, :), 'r')
-% %plot box 2
-% % find edges for box 2 (plotting only)
-% ab2 = (b2-a2).*t + a2;
-% ac2 = (c2-a2).*t + a2;
-% cl2 = (l2-c2).*t + c2;
-% bl2 = (l2-b2).*t + b2;
-% dk2 = (k2-d2).*t + d2;
-% ki2 = (i2-k2).*t + k2;
-% ij2 = (j2-i2).*t + i2;
-% dj2 = (j2-d2).*t + d2;
-% bj2 = (j2-b2).*t + b2;
-% ad2 = (d2-a2).*t + a2;
-% ck2 = (k2-c2).*t + c2;
-% li2 = (i2-l2).*t + l2;
-% scatter3(BoundingBox2(1, :), BoundingBox2(2, :), BoundingBox2(3, :), 'b')
-% scatter3(ab2(1, :), ab2(2, :), ab2(3, :), 'b')
-% scatter3(ac2(1, :), ac2(2, :), ac2(3, :), 'b')
-% scatter3(cl2(1, :), cl2(2, :), cl2(3, :), 'b')
-% scatter3(bl2(1, :), bl2(2, :), bl2(3, :), 'b')
-% scatter3(dk2(1, :), dk2(2, :), dk2(3, :), 'b')
-% scatter3(ki2(1, :), ki2(2, :), ki2(3, :), 'b')
-% scatter3(ij2(1, :), ij2(2, :), ij2(3, :), 'b')
-% scatter3(dj2(1, :), dj2(2, :), dj2(3, :), 'b')
-% scatter3(bj2(1, :), bj2(2, :), bj2(3, :), 'b')
-% scatter3(ad2(1, :), ad2(2, :), ad2(3, :), 'b')
-% scatter3(ck2(1, :), ck2(2, :), ck2(3, :), 'b')
-% scatter3(li2(1, :), li2(2, :), li2(3, :), 'b')
+%     % % UNCOMMENT to plot
+%     %
+%     t = linspace(0, 1, 50);
+%     %plot box 1
+%     % find edges for box 1 (plotting only)
+%     ab1 = (b1-a1).*t + a1;
+%     ac1 = (c1-a1).*t + a1;
+%     cl1 = (l1-c1).*t + c1;
+%     bl1 = (l1-b1).*t + b1;
+%     dk1 = (k1-d1).*t + d1;
+%     ki1 = (i1-k1).*t + k1;
+%     ij1 = (j1-i1).*t + i1;
+%     dj1 = (j1-d1).*t + d1;
+%     bj1 = (j1-b1).*t + b1;
+%     ad1 = (d1-a1).*t + a1;
+%     ck1 = (k1-c1).*t + c1;
+%     li1 = (i1-l1).*t + l1;
+%     figure(1)
+%     hold on
+%     scatter3(BoundingBox1(1, :), BoundingBox1(2, :), BoundingBox1(3, :), 'r')
+%     scatter3(ab1(1, :), ab1(2, :), ab1(3, :), 'r')
+%     scatter3(ac1(1, :), ac1(2, :), ac1(3, :), 'r')
+%     scatter3(cl1(1, :), cl1(2, :), cl1(3, :), 'r')
+%     scatter3(bl1(1, :), bl1(2, :), bl1(3, :), 'r')
+%     scatter3(dk1(1, :), dk1(2, :), dk1(3, :), 'r')
+%     scatter3(ki1(1, :), ki1(2, :), ki1(3, :), 'r')
+%     scatter3(ij1(1, :), ij1(2, :), ij1(3, :), 'r')
+%     scatter3(dj1(1, :), dj1(2, :), dj1(3, :), 'r')
+%     scatter3(bj1(1, :), bj1(2, :), bj1(3, :), 'r')
+%     scatter3(ad1(1, :), ad1(2, :), ad1(3, :), 'r')
+%     scatter3(ck1(1, :), ck1(2, :), ck1(3, :), 'r')
+%     scatter3(li1(1, :), li1(2, :), li1(3, :), 'r')
+%     %plot box 2
+%     % find edges for box 2 (plotting only)
+%     ab2 = (b2-a2).*t + a2;
+%     ac2 = (c2-a2).*t + a2;
+%     cl2 = (l2-c2).*t + c2;
+%     bl2 = (l2-b2).*t + b2;
+%     dk2 = (k2-d2).*t + d2;
+%     ki2 = (i2-k2).*t + k2;
+%     ij2 = (j2-i2).*t + i2;
+%     dj2 = (j2-d2).*t + d2;
+%     bj2 = (j2-b2).*t + b2;
+%     ad2 = (d2-a2).*t + a2;
+%     ck2 = (k2-c2).*t + c2;
+%     li2 = (i2-l2).*t + l2;
+%     scatter3(BoundingBox2(1, :), BoundingBox2(2, :), BoundingBox2(3, :), 'b')
+%     scatter3(ab2(1, :), ab2(2, :), ab2(3, :), 'b')
+%     scatter3(ac2(1, :), ac2(2, :), ac2(3, :), 'b')
+%     scatter3(cl2(1, :), cl2(2, :), cl2(3, :), 'b')
+%     scatter3(bl2(1, :), bl2(2, :), bl2(3, :), 'b')
+%     scatter3(dk2(1, :), dk2(2, :), dk2(3, :), 'b')
+%     scatter3(ki2(1, :), ki2(2, :), ki2(3, :), 'b')
+%     scatter3(ij2(1, :), ij2(2, :), ij2(3, :), 'b')
+%     scatter3(dj2(1, :), dj2(2, :), dj2(3, :), 'b')
+%     scatter3(bj2(1, :), bj2(2, :), bj2(3, :), 'b')
+%     scatter3(ad2(1, :), ad2(2, :), ad2(3, :), 'b')
+%     scatter3(ck2(1, :), ck2(2, :), ck2(3, :), 'b')
+%     scatter3(li2(1, :), li2(2, :), li2(3, :), 'b')
 
 end
 
@@ -190,7 +195,6 @@ else
     disp('---  Acceptable Interference Detected  ---')
     bblistNew = cat(3, bblist, BoundingBox2);
 end
-toc
 
 end
 
