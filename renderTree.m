@@ -6,12 +6,15 @@ function h = renderTree(BezStruct)
 %                   contains Bezier curve in the 'curve' field
 % OUTPUTS:
 %   h           --  Handle of the figure created 
-    figure; hold on;
-    for gen = 1:length(BezStructure)
+
+    h = figure; hold on;
+    for gen = 1:length(BezStruct)
 %      'gen' is generation number of the Bezier Structure
-       
-        
-        
+       curveMat = BezStruct(gen).curve;
+       xMat = squeeze(curveMat(1,:,:));
+       yMat = squeeze(curveMat(2,:,:));
+       zMat = squeeze(curveMat(3,:,:));
+       plot3(xMat,yMat,zMat);
     end
 end
 

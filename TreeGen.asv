@@ -1,30 +1,54 @@
-function [outStructure,generationOut] = TreeGen(start,generationIn,maxGeneration,...
-    dist,aspectRatio,CPorder,inStructure,samples,numBranches)
+function [outStruc,generationOut] = TreeGen(start,generationIn,maxGeneration,...
+    distAng,distAngVar,distLoc,distLocVar,aspectRatio,CPorder,samples,...
+    numBranches,inStruc,bblist,bblistNew)
 %TREEGEN Recursive function generating a Bezier curve structure array.
 %   Detailed explanation goes here
 %    Generate BBang from random dist later
 %     global bbList;
-    global inSt
+
+% DEBUG FLAG:
+checkBB = true;
+
+persistent struc;
+struc = inStruc;
 if generationIn > maxGeneration
-    outStructure = inStructure;
     generationOut = generationIn;
+    outStruc = struc;
     return;
 else
-    %   TODO: Generate weighted random angles using probability dist
-    BBang = [pi/6; pi/8; pi/12]; % Placeholder test input
-    BB = BBGen(start,BBang,aspectRatio);
+    % Bias the angle near 0 degrees (angles can be positive of negative depending on distribution)
+    distributionAng = DistGen(distAng, distAngVar(1), distAngVar(2));
+    BBang = [random(distributionAng); random(distributionAng)*-pi/2; random(distributionAng)];
+    % Bounding Box Interference Check
+    while size(bblist, 3) == size(bblistNew, 3)
+        BB = BBGen(start,BBang,aspectRatio);
+        if
+        bblistNew = BoundingCheck(bblist, BB);
+        if isempty(bblist) == 1
+            break
+        end
+    end
+    bblist = bblistNew;
     cp = ControlPGen(BB,CPorder,BBang);
     BezCurve = BezierCurve(cp,samples);
-    inStructure(generationIn).curve = cat(3,inStructure(generationIn).curve,BezCurve);
+    struc(generationIn).curve = cat(3,struc(generationIn).curve,BezCurve);
     for i = 1:numBranches
-        %   TODO: Generate new start points on Bezier curve to feed into recursed, weight randomness
-        %   via dist
-        start = BezCurve(:,end); %Placeholder test input
-        [passbackStructure,passbackGen] = TreeGen(start,generationIn + 1,maxGeneration,dist,...
-            aspectRatio,CPorder,inStructure,samples,numBranches);
+        % Bias the branch starting location near the end of branch
+        distributionLoc =  DistGen(distLoc, distLocVar(1), distLocVar(2)); 
+        loc = random(distributionLoc);
+        if loc > 1
+            loc = 1;
+        elseif loc <= 0
+            loc = 0.01;
+        end
+        startNext = round(loc*samples);
+        startNext = BezCurve(:, startNext);
+        [passbackStr,passbackGen] = TreeGen(startNext,generationIn + 1,maxGeneration,distAng,...
+            distAngVar,distLoc,distLocVar,aspectRatio,CPorder,samples,numBranches,struc,...
+            bblist, bblistNew);
     end
-    outStructure = passbackStructure;
     generationOut = passbackGen;
+    outStruc = passbackStr;
     %     outStructure(generationIn) = TreeGen(generationIn + 1)
 end
 

@@ -2,8 +2,10 @@
 clear; clc; close all;
 
 start = [0;0;0];
-maxGen = 4;
+maxGen = 3;
 CPorder = 4;
+rng(0,'twister');
+
 % 
 aspectRatio = [2;3;4];
 distAng = 'Normal';
@@ -20,3 +22,4 @@ firstStruc(maxGen) = struct('curve',[]);
 [BezStructure,generationOut] = TreeGen(start,1,maxGen,distAng,distAngVar,distLoc,...
     distLocVar,aspectRatio, CPorder,samp,numBranches,firstStruc,bblist,bblistNew);
 
+h = renderTree(BezStructure);

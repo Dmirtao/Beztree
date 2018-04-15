@@ -11,7 +11,6 @@ function cp = ControlPGen(bb,order,bbAng)
 % cp    --  Control points
 % Version 1.0
 
-rng(0,'twister');
 cp = zeros(3,order+1);
 cp(:,1) = [0;0;0];
 
