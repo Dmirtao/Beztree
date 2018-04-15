@@ -4,7 +4,7 @@ clear; clc; close all;
 start = [0;0;0];
 maxGen = 3;
 CPorder = 3;
-rng(0,'twister');
+rng('shuffle');
 
 % 
 aspectRatio = [1;2;12];
