@@ -18,6 +18,10 @@ function h = renderTree(BezStruct)
        yMat = squeeze(curveMat(2,:,:));
        zMat = squeeze(curveMat(3,:,:));
        plot3(xMat,yMat,zMat,'Color',treeColor,'LineWidth',widthArr(gen));
+       xlabel('x')
+       ylabel('y')
+       zlabel('z')
+       axis equal
     end
 end
 

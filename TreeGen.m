@@ -19,7 +19,17 @@ if generationIn > maxGeneration
 else
     % Bias the angle near 0 degrees (angles can be positive of negative depending on distribution)
     distributionAng = DistGen(distAng, distAngVar(1), distAngVar(2)); %Check this for correctness
-    BBang = [random(distributionAng); random(distributionAng)*-pi/2; random(distributionAng)];
+    if generationIn <= 1
+%         Angles which align BB to vertical axis
+%         xh = [1;0;0]; yh = [0;1;0]; zh = [0;0;1];
+%         OP = aspectRatio-start;
+%         OQ = [OP(1);OP(2);0];
+%         BBang = [acos(dot([0;OP(2);OP(3)],zh)./norm([0;OP(2);OP(3)])); ...
+%             acos(dot([OP(1);0;OP(3)],zh)./norm([OP(1);0;OP(3)]));0];
+          BBang = [0;0;0];
+    else
+        BBang = [random(distributionAng); random(distributionAng); randRange(0,2.*pi)];
+    end
     % Bounding Box Interference Check
     if checkBB
         while size(bblist, 3) == size(bblistNew, 3)
@@ -41,7 +51,7 @@ else
         distributionLoc =  DistGen(distLoc, distLocVar(1), distLocVar(2));
         loc = random(distributionLoc);
         if loc > 1
-            loc = 1;
+            loc = 0.99;
         elseif loc <= 0
             loc = 0.01;
         end
