@@ -56,7 +56,7 @@ else
             loc = 0.01;
         end
         decimAR = reductionFactor.*aspectRatio;
-        startNext = round(loc*samples);
+        startNext = ceil(loc*samples);
         startNext = BezCurve(:, startNext);
         [passbackStr,passbackGen,passbackAR] = TreeGen(startNext,generationIn + 1,maxGeneration,distAng,...
             distAngVar,distLoc,distLocVar,decimAR,CPorder,samples,numBranches,struc,...
