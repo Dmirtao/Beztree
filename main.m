@@ -2,19 +2,19 @@
 clear; clc; close all;
 
 start = [0;0;0];
-maxGen = 4;
-CPorder = 7;
+maxGen = 7;
+CPorder = 11;
 rng('shuffle');
 
 % 
-aspectRatio = [1;2;10];
-reductionFactor = 0.4;  % Ratio of how much the aspect ratio is decimated each generation.
+aspectRatio = [1;1;10];
+reductionFactor = 0.7;  % Ratio of how much the aspect ratio is decimated each generation.
 distAng = 'Normal';
-distAngVar = [0, 0.2]; % mean, stdev
+distAngVar = [0, 0.3]; % mean, stdev
 distLoc = 'Normal';
-distLocVar = [.6, .3]; % mean, stdev
-samp = 100;
-numBranches = 3;
+distLocVar = [.8, .3]; % mean, stdev
+samp = 10;
+numBranches = 2;
 bblist = [];
 bblistNew =[];
 % for i = 1:maxBranch

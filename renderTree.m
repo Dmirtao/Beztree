@@ -7,7 +7,7 @@ function h = renderTree(BezStruct)
 % OUTPUTS:
 %   h           --  Handle of the figure created 
     bzLen = length(BezStruct);
-    widthArr = 2.*(bzLen:-1:1);
+    widthArr = 1.5.*(bzLen:-1:1);
     treeColor = [117/255, 100/255, 55/255]; %Color vector in RGB colorspace
     
     h = figure; hold on;
