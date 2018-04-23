@@ -22,7 +22,7 @@ function varargout = GUIfrontend(varargin)
 
 % Edit the above text to modify the response to help GUIfrontend
 
-% Last Modified by GUIDE v2.5 22-Apr-2018 20:45:41
+% Last Modified by GUIDE v2.5 23-Apr-2018 16:38:44
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -186,6 +186,213 @@ function MeanBranchNum_CreateFcn(hObject, eventdata, handles)
 % handles    empty - handles not created until after all CreateFcns called
 
 % Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in PDFLocdistType.
+function PDFLocdistType_Callback(hObject, eventdata, handles)
+% hObject    handle to PDFLocdistType (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns PDFLocdistType contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from PDFLocdistType
+
+
+% --- Executes during object creation, after setting all properties.
+function PDFLocdistType_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PDFLocdistType (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function PDFLocparamEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to PDFLocparamEdit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of PDFLocparamEdit as text
+%        str2double(get(hObject,'String')) returns contents of PDFLocparamEdit as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function PDFLocparamEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PDFLocparamEdit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in PDFAngdistType.
+function PDFAngdistType_Callback(hObject, eventdata, handles)
+% hObject    handle to PDFAngdistType (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns PDFAngdistType contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from PDFAngdistType
+
+
+% --- Executes during object creation, after setting all properties.
+function PDFAngdistType_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PDFAngdistType (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function PDFAngparamEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to PDFAngparamEdit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of PDFAngparamEdit as text
+%        str2double(get(hObject,'String')) returns contents of PDFAngparamEdit as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function PDFAngparamEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PDFAngparamEdit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function SamplesperEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to SamplesperEdit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of SamplesperEdit as text
+%        str2double(get(hObject,'String')) returns contents of SamplesperEdit as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function SamplesperEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to SamplesperEdit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in popupmenu8.
+function popupmenu8_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu8 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu8
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu8_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function BranchNumEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to BranchNumEdit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of BranchNumEdit as text
+%        str2double(get(hObject,'String')) returns contents of BranchNumEdit as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function BranchNumEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to BranchNumEdit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit7_Callback(hObject, eventdata, handles)
+% hObject    handle to edit7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit7 as text
+%        str2double(get(hObject,'String')) returns contents of edit7 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit7_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function AspectRatioEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to AspectRatioEdit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of AspectRatioEdit as text
+%        str2double(get(hObject,'String')) returns contents of AspectRatioEdit as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function AspectRatioEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to AspectRatioEdit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
